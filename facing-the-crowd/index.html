@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>面对人群 — Facing the Crowd · Gem Lee</title>
+<meta name="description" content="Eight pieces about composure and the solitude beneath it — the face you keep while walking through a crowd. Two voices: a dark trumpet (the inner) and a suave alto saxophone (the surface). In homage to Chet Baker and Paul Desmond.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicAlbum",
+  "name": "面对人群 — Facing the Crowd",
+  "byArtist": { "@type": "MusicGroup", "name": "Gem Lee" },
+  "genre": "Cool Jazz / West Coast Cool Jazz",
+  "license": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+  "copyrightYear": "2026",
+  "copyrightHolder": { "@type": "Person", "name": "Gem Lee", "email": "nongming66@gmail.com" },
+  "description": "Eight pieces about composure and the solitude beneath it — the face you keep while walking through a crowd. Two voices alternate: a dark trumpet (the inner) and a suave alto saxophone (the surface). In homage to Chet Baker and Paul Desmond; inspired by Wang Xiaoshuai's film Beijing Bicycle (十七岁的单车, 2001) and Zhang Chu's song 姐姐. Concept, direction and prompts by Gem Lee. Audio synthesized via AI (Gemini Lyria)."
+}
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /*
+  ─────────────────────────────────────────────
+  COLOR THEME — PROJECT-022 面对人群 (West Coast Cool Jazz)
+  Palette follows the cover: deep blue-black + steel blue, warm amber accent
+  Accent : #8aabbd (steel blue) · Warm : #c89a5a (amber, active track)
+  ─────────────────────────────────────────────
+  */
+
+  body {
+    background: #090b10;
+    color: #d4ccc2;
+    font-family: 'Georgia', 'STSong', serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bg-image {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url('./cover.png');
+    background-size: cover; background-position: center center;
+    opacity: 1; pointer-events: none;
+  }
+  .bg-overlay {
+    position: fixed; inset: 0; z-index: 0;
+    background: rgba(0, 0, 0, 0.40); pointer-events: none;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────── */
+  .header { padding: 22px 40px 18px; flex-shrink: 0; position: relative; z-index: 1; }
+  .album-title { font-size: 26px; font-weight: normal; letter-spacing: 0.12em; color: #ffffff; text-shadow: 0 1px 12px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.6); }
+  .album-subtitle { font-size: 12px; color: #8aabbd; margin-top: 5px; letter-spacing: 0.1em; text-shadow: 0 1px 8px rgba(0,0,0,0.9); }
+
+  /* ── BODY ───────────────────────────────────────────── */
+  .body { display: flex; flex: 1; overflow: hidden; position: relative; z-index: 1; }
+
+  .sidebar { width: 230px; overflow-y: auto; flex-shrink: 0; padding: 12px 0; }
+  .track-item { padding: 10px 20px; cursor: pointer; transition: opacity 0.2s; }
+  .track-item:hover { opacity: 0.75; }
+  .track-num { font-size: 9px; letter-spacing: 0.2em; color: #8aabbd; margin-bottom: 3px; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+  .track-zh { font-size: 14px; color: #ffffff; margin-bottom: 2px; text-shadow: 0 1px 8px rgba(0,0,0,0.95); }
+  .track-en { font-size: 10px; color: #6f8694; letter-spacing: 0.08em; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+  .track-item.active .track-zh { color: #e7c389; }
+  .track-item.active .track-en { color: #c89a5a; }
+
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; padding: 40px 50px 28px; }
+  .now-playing { flex: 1; overflow-y: auto; }
+  .np-number { font-size: 10px; letter-spacing: 0.35em; color: #8aabbd; margin-bottom: 14px; text-shadow: 0 1px 8px rgba(0,0,0,0.9); }
+  .np-zh { font-size: 48px; font-weight: normal; color: #ffffff; letter-spacing: 0.08em; line-height: 1.2; margin-bottom: 10px; text-shadow: 0 2px 16px rgba(0,0,0,0.95), 0 0 60px rgba(0,0,0,0.5); }
+  .np-en { font-size: 14px; letter-spacing: 0.22em; color: #8aabbd; text-transform: uppercase; margin-bottom: 28px; text-shadow: 0 1px 10px rgba(0,0,0,0.95); }
+  .np-story { font-size: 14px; line-height: 1.9; color: #c3bbb1; max-width: 540px; font-style: italic; transition: opacity 0.4s ease; text-shadow: 0 1px 10px rgba(0,0,0,0.95); }
+
+  /* ── CONTROLS ───────────────────────────────────────── */
+  .controls { flex-shrink: 0; padding-top: 22px; }
+  .progress-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .time { font-size: 10px; letter-spacing: 0.12em; color: #8aabbd; width: 36px; flex-shrink: 0; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+  .time.right { text-align: right; }
+  .progress-bar { flex: 1; height: 1px; background: rgba(138,171,189,0.3); cursor: pointer; position: relative; }
+  .progress-fill { height: 100%; background: #c89a5a; width: 0%; transition: width 0.25s linear; }
+  .buttons { display: flex; align-items: center; gap: 16px; }
+  .btn { background: none; border: none; color: #6f8694; cursor: pointer; font-size: 10px; letter-spacing: 0.25em; padding: 4px 0; font-family: inherit; transition: color 0.2s; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+  .btn:hover { color: #ffffff; }
+  .btn-play { font-size: 16px; color: #ffffff; border: 1px solid rgba(138,171,189,0.6); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; padding: 0; }
+  .btn-play:hover { border-color: #c89a5a; color: #c89a5a; }
+  .status-dot { width: 5px; height: 5px; border-radius: 50%; background: #c89a5a; opacity: 0; transition: opacity 0.3s; margin-left: auto; }
+  .status-dot.playing { opacity: 1; }
+
+  /* ── FOOTER ─────────────────────────────────────────── */
+  .footer { text-align: center; font-size: 9px; color: #6f8694; letter-spacing: 0.1em; padding: 7px 20px 10px; flex-shrink: 0; line-height: 2; position: relative; z-index: 1; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
+  .footer a { color: #6f8694; text-decoration: none; }
+  .mantra { font-size: 11px; color: #8aabbd; letter-spacing: 0.32em; font-style: italic; margin-top: 3px; text-shadow: 0 1px 10px rgba(0,0,0,0.9); }
+
+  /* ── MOBILE ─────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    body { height: auto; min-height: 100dvh; overflow: auto; }
+    .bg-image { background-attachment: scroll; }
+    .header { padding: 16px 20px 12px; }
+    .album-title { font-size: 20px; }
+    .album-subtitle { font-size: 10px; }
+    .body { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; display: flex; flex-direction: row; overflow-x: auto; overflow-y: hidden; padding: 6px 0; flex-shrink: 0; -webkit-overflow-scrolling: touch; }
+    .track-item { flex-shrink: 0; padding: 8px 16px; }
+    .track-item.active { border-bottom: 2px solid #c89a5a; }
+    .track-en { display: none; }
+    .main { padding: 24px 20px 16px; }
+    .np-zh { font-size: 32px; }
+    .np-en { font-size: 10px; letter-spacing: 0.18em; margin-bottom: 18px; }
+    .np-story { font-size: 13px; }
+    .controls { padding-top: 16px; }
+    .btn-play { width: 44px; height: 44px; }
+  }
+
+  /* ── BACK LINK ──────────────────────────────────────── */
+  .back-link { position: fixed; top: 18px; right: 22px; z-index: 10; font-size: 9px; letter-spacing: 0.22em; text-decoration: none; text-transform: uppercase; text-shadow: 0 1px 8px rgba(0,0,0,0.9); transition: color 0.2s; }
+  .back-link:hover { color: #ffffff; }
+  @media (max-width: 768px) { .back-link { top: 14px; right: 16px; font-size: 10px; } }
+</style>
+</head>
+<body>
+<a class="back-link" href="/" style="color:#8aabbd">&#9666; ALL ALBUMS</a>
+<div class="bg-image"></div>
+<div class="bg-overlay"></div>
+<div class="header">
+  <div class="album-title">面对人群 &nbsp;·&nbsp; Facing the Crowd</div>
+  <div class="album-subtitle">Gem Lee &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; West Coast Cool Jazz &nbsp;·&nbsp; Inspired by Wang Xiaoshuai&rsquo;s &ldquo;Beijing Bicycle&rdquo; &amp; Zhang Chu&rsquo;s &ldquo;姐姐&rdquo;</div>
+</div>
+<div class="body">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="main">
+    <div class="now-playing">
+      <div class="np-number" id="npNum">TRACK 01</div>
+      <div class="np-zh"    id="npZh">入场</div>
+      <div class="np-en"    id="npEn">Two Chairs by the Window</div>
+      <div class="np-story" id="npStory"></div>
+    </div>
+    <div class="controls">
+      <div class="progress-wrap">
+        <span class="time"         id="timeElapsed">0:00</span>
+        <div  class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+        <span class="time right"   id="timeTotal">0:00</span>
+        <div  class="status-dot"   id="statusDot"></div>
+      </div>
+      <div class="buttons">
+        <button class="btn"          onclick="prevTrack()">&#9664;&#9664; PREV</button>
+        <button class="btn btn-play" id="btnPlay" onclick="togglePlay()">&#9654;</button>
+        <button class="btn"          onclick="nextTrack()">NEXT &#9654;&#9654;</button>
+      </div>
+    </div>
+  </div>
+</div>
+<audio id="audio"></audio>
+<script>
+const BASE = 'https://raw.githubusercontent.com/GemLeeHub/gemlee-music/main/';
+const tracks = [
+  { num:"01", zh:"入场", en:"Two Chairs by the Window",
+    file:BASE+"20260607_060001_Two_Chairs_by_the_Window.mp3",
+    story:"The private self, before anyone is watching. A trumpet alone in the low light; then, partway through, the composure quietly rises — a piano slips in, the face goes on. The whole record, in miniature." },
+  { num:"02", zh:"潇洒", en:"Before the Last Call",
+    file:BASE+"20260607_060002_Before_the_Last_Call.mp3",
+    story:"This is the face you wear out among people — easy, unhurried, the most composed person in the room. The sax tosses off its lines as if nothing costs it anything. Nothing to prove. Just walking through." },
+  { num:"03", zh:"裂痕", en:"Room Without Windows",
+    file:BASE+"20260607_060003_Room_Without_Windows.mp3",
+    story:"The cracks begin to show. The trumpet is more exposed now, holding together under a little strain. You keep the face, but you can feel its edges. The world goes by; you watch it pass." },
+  { num:"04", zh:"两面", en:"One Room Two Voices",
+    file:BASE+"20260607_060004_One_Room_Two_Voices.mp3",
+    story:"For the first time both voices share one room — the inner trumpet on the left, the composed sax on the right. They never speak at once: one says something, the other answers. Two sides of the same person, taking turns." },
+  { num:"05", zh:"卸下", en:"Breath on the Glass",
+    file:BASE+"20260607_060005_Breath_On_The_Glass.mp3",
+    story:"The mask comes all the way off. Just a trumpet, bare, sinking — no piano to hide behind, no chord to resolve to. The lowest point of the record, and the most honest." },
+  { num:"06", zh:"强颜", en:"Rain Against the Glass",
+    file:BASE+"20260607_060006_Rain_Against_the_Glass.mp3",
+    story:"The mask goes back on. The sax returns, suave as before — but now you can hear through it. The poise is real, and the shadow under it is real, at the same time." },
+  { num:"07", zh:"释然", en:"A Room Without Light",
+    file:BASE+"20260607_060007_A_Room_Without_Light.mp3",
+    story:"Afterward. The trumpet is low and still, no longer reaching, no longer climbing. Not numb — settled. The dust has come down; something has been accepted." },
+  { num:"08", zh:"散场", en:"The Corner Booth",
+    file:BASE+"20260607_060008_The_Corner_Booth.mp3",
+    story:"The last song of the night. The composed face turns to meet the crowd one final time — but it is worn lightly now, at peace. The combo eases toward stillness; the final phrase settles, and lets go." }
+];
+let current=0; const audio=document.getElementById('audio');
+function fmt(s){if(isNaN(s))return'0:00';return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
+function buildSidebar(){const sb=document.getElementById('sidebar');tracks.forEach((t,i)=>{const el=document.createElement('div');el.className='track-item'+(i===0?' active':'');el.id='ti'+i;el.innerHTML=`<div class="track-num">TRACK ${t.num}</div><div class="track-zh">${t.zh}</div><div class="track-en">${t.en}</div>`;el.onclick=()=>loadTrack(i,true);sb.appendChild(el);});}
+function loadTrack(idx,play){document.getElementById('ti'+current).classList.remove('active');current=idx;document.getElementById('ti'+current).classList.add('active');const t=tracks[current];document.getElementById('npNum').textContent='TRACK '+t.num;document.getElementById('npZh').textContent=t.zh;document.getElementById('npEn').textContent=t.en;const s=document.getElementById('npStory');s.style.opacity=0;setTimeout(()=>{s.textContent=t.story;s.style.opacity=1;},200);audio.src=t.file;if(play)audio.play();updateBtn();}
+function togglePlay(){audio.paused?audio.play():audio.pause();updateBtn();}
+function updateBtn(){document.getElementById('btnPlay').innerHTML=audio.paused?'&#9654;':'&#9646;&#9646;';document.getElementById('statusDot').className='status-dot'+(audio.paused?'':' playing');}
+function prevTrack(){if(audio.currentTime>3){audio.currentTime=0;return;}loadTrack((current-1+tracks.length)%tracks.length,!audio.paused);}
+function nextTrack(){loadTrack((current+1)%tracks.length,!audio.paused);}
+audio.addEventListener('timeupdate',()=>{if(!audio.duration)return;document.getElementById('progressFill').style.width=(audio.currentTime/audio.duration*100)+'%';document.getElementById('timeElapsed').textContent=fmt(audio.currentTime);document.getElementById('timeTotal').textContent=fmt(audio.duration);});
+audio.addEventListener('ended',()=>{if(current<tracks.length-1)loadTrack(current+1,true);else updateBtn();});
+audio.addEventListener('play',updateBtn);audio.addEventListener('pause',updateBtn);
+document.getElementById('progressBar').addEventListener('click',e=>{if(!audio.duration)return;const r=e.currentTarget.getBoundingClientRect();audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;});
+buildSidebar();loadTrack(0,false);
+</script>
+<div class="footer">
+  &copy; 2026 Gem Lee &nbsp;&middot;&nbsp; <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a> &nbsp;&middot;&nbsp; Non-commercial use free with attribution &nbsp;&middot;&nbsp; Commercial use: <a href="mailto:nongming66@gmail.com">nongming66@gmail.com</a> &nbsp;&middot;&nbsp; Fees donated to Dharma Drum Mountain Seattle (法鼓山西雅图分会)
+  <div class="mantra">万古长空，一朝风月</div>
+</div>
+</body>
+</html>
